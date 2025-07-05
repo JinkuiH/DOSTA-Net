@@ -26,7 +26,7 @@ Artery extraction from X-ray coronary angiography (XCA) images is essential for 
 
 ---
 
-## 🔧 Installation
+## Installation
 
 ```bash
 git clone https://github.com/JinkuiH/DOSTA-Net.git
@@ -36,7 +36,7 @@ pip install -r requirements.txt
 
 ---
 
-## 🚀 Training
+## Training
 
 To train the model using synthetic and pseudo-labeled data:
 
@@ -48,7 +48,7 @@ Make sure `config.json` is properly set (dataset paths, hyperparameters, etc.).
 
 ---
 
-## 🔍 Inference
+## Inference
 
 Before running inference, please download the pretrained model weights and place them in the weights/ folder. 
 
@@ -62,14 +62,14 @@ Results will be saved in the directory specified in the file.
 
 ---
 
-## 📦 Pretrained Model
+## Pretrained Model
 
 You can download our pretrained model from the [Releases](https://github.com/JinkuiH/DOSTA-Net/releases) page.
 
 ---
 
 
-## 📜 Citation
+## Citation
 
 If you find this work helpful, please cite:
 
