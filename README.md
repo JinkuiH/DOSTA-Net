@@ -34,8 +34,6 @@ cd DOSTA-Net
 pip install -r requirements.txt
 ```
 
-*Note: Python ≥3.7 and PyTorch ≥1.10 are recommended.*
-
 ---
 
 ## 🚀 Training
