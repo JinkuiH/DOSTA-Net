@@ -1126,35 +1126,7 @@ if __name__ =='__main__':
     fold = 0
     myTrainer = trainingPlanner(plans, fold)
 
-    # path = 'outputs/DOSTA-256-N5-C10-125/InternalVesselOrganized/checkpoint_epoch_39.pth'
-    # myTrainer.load_checkpoint(path)
-
-    # myTrainer.load_checkpoint(join(path, 'checkpoint_epoch_39.pth'))
-    # path = 'results/sameBackground_augmentedVessel_strong4/trainingPlanner__Ablation-8/fold_0/checkpoint_epoch_19.pth'
-    # myTrainer.load_checkpoint(path)
-    # print(join(myTrainer.output_folder,'checkpoint_latest.pth'))
-    # myTrainer.load_checkpoint(join(myTrainer.output_folder,'checkpoint_latest.pth'))
     myTrainer.start_train()
-
-    # dataPath = '/media/imedHDD/imed/personal/wzr/code/CAS/dataset/Ori_quicktest'
-    # dataPath = 'data/Private/Ori_quicktest'
-    # dataPath = '/home/imed/personal/kevin/code/20.CAS/dataset/Ori_quicktest'
-
-    # dataPath = '/media/bo/Elements_HERA/jinkui/dataset/Ori_quicktest_256'
-    # dataPath = '/home/jinkui/dataset/Ori_quicktest_256' #EORS
-    # myTrainer.output_folder = join('outputs', myTrainer.plans['plans_name'], 'output_slices_pred')
-    # imgPath = join(myTrainer.output_folder, 'CMB')
-    # from tqdm import tqdm
-    # for item in tqdm(os.listdir(imgPath)):
-    #     myTrainer.create_video(join(imgPath,item), join(imgPath, item, 'video.mp4'))
-
-    # myTrainer.output_folder = join('outputs', myTrainer.plans['plans_name'], 'real_prediction')
-    # myTrainer.perform_validation(dataPath)
-
-    # imgPath = c 'CMB')
-    # from tqdm import tqdm
-    # for item in tqdm(os.listdir(imgPath)):
-    #     myTrainer.create_video(join(imgPath,item), join(imgPath, item, 'video.mp4'))
 
     dataPath = 'datasets/External_30XCA/Images'
     GTPtah = 'datasets/External_30XCA/GT'
