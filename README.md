@@ -41,7 +41,7 @@ pip install -r requirements.txt
 To train the model using synthetic and pseudo-labeled data:
 
 ```bash
-python training_ours.py --config config.json
+python training_ours.py
 ```
 
 Make sure `config.json` is properly set (dataset paths, hyperparameters, etc.).
