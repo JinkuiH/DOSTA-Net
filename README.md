@@ -8,7 +8,7 @@
 Artery extraction from X-ray coronary angiography (XCA) images is essential for accurate diagnosis and treatment of coronary artery diseases. This project introduces **DOSTA-Net**, a deep learning framework that leverages synthetic temporal XCA data for training without requiring manual annotations.
 
 📌 **[Paper Link (Coming Soon)]()**
-📦 **[Pretrained Model Weights](https://github.com/JinkuiH/DOSTA-Net/releases)**
+📦 **[Pretrained Model Weights]([https://github.com/JinkuiH/DOSTA-Net/releases](https://drive.google.com/file/d/1ORcWla7-Ca-b07PasN7dhPU-PVGjxXwF/view?usp=sharing))**
 
 
 ---
@@ -64,7 +64,7 @@ Results will be saved in the directory specified in the file.
 
 ## Pretrained Model
 
-You can download our pretrained model from the [Releases](https://github.com/JinkuiH/DOSTA-Net/releases) page.
+You can download our pretrained model from the [Releases]([https://github.com/JinkuiH/DOSTA-Net/releases](https://drive.google.com/file/d/1ORcWla7-Ca-b07PasN7dhPU-PVGjxXwF/view?usp=sharing)) page.
 
 ---
 
