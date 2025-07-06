@@ -75,7 +75,7 @@ If you find this work helpful, please cite:
 
 ```bibtex
 @article{hao2025dosta,
-  title={DOSTA-Net: Domain-Shuffle Temporal Attention Network for Artery Extraction in XCA},
+  title={DOSTA-Net: Domain-Shuffle Temporal Attention Network for Vessel Extraction in X-Ray Coronary Angiography Using Synthetic Data},
   author={Hao, Jinkui and others},
   journal={TBD},
   year={2025}
