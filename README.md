@@ -64,7 +64,7 @@ Results will be saved in the directory specified in the file.
 
 ## Pretrained Model
 
-You can download our pretrained model from the [Releases]([https://drive.google.com/file/d/1ORcWla7-Ca-b07PasN7dhPU-PVGjxXwF/view?usp=sharing](https://drive.google.com/file/d/1ORcWla7-Ca-b07PasN7dhPU-PVGjxXwF/view?usp=sharing)) page.
+You can download our pretrained model from the [Releases](https://drive.google.com/file/d/1ORcWla7-Ca-b07PasN7dhPU-PVGjxXwF/view?usp=sharing) page.
 
 ---
 
