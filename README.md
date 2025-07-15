@@ -50,7 +50,7 @@ To run inference using pretrained weights:
 python inference.py
 ```
 
-Results will be saved in the directory specified in the file.
+Results will be saved in the directory specified in the outputs file.
 
 ---
 
