@@ -642,7 +642,7 @@ if __name__ =='__main__':
     fold = 0
     myTrainer = trainingPlanner(plans, fold)
 
-    path = 'weights/DOSTA-Net.pth'
+    path = 'weights/checkpoint_DOSTANet.pth'
     myTrainer.load_checkpoint(path)
 
     
