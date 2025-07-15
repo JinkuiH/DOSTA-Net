@@ -38,18 +38,6 @@ pip install -r requirements.txt
 
 ---
 
-## 🟠 Training
-
-To train the model using synthetic and pseudo-labeled data:
-
-```bash
-python training_ours.py
-```
-
-Make sure `config.json` is properly set (dataset paths, hyperparameters, etc.).
-
----
-
 ## 🟠 Inference
 
 Before running inference, please download the pretrained model weights and place them in the weights/ folder. 
@@ -63,6 +51,18 @@ python inference.py
 ```
 
 Results will be saved in the directory specified in the file.
+
+---
+
+## 🟠 Training
+
+To train the model using synthetic and pseudo-labeled data:
+
+```bash
+python training_ours.py
+```
+
+Make sure `config.json` is properly set (dataset paths, hyperparameters, etc.).
 
 ---
 
