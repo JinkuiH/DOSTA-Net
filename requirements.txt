@@ -1,5 +1,4 @@
 torch==2.7.1
-torchtorch==2.7.1
 torchvision==0.22.1
 acvl_utils==0.2.1
 batchgenerators==0.25.1
