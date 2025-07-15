@@ -31,6 +31,8 @@ Artery extraction from X-ray coronary angiography (XCA) images is essential for 
 ```bash
 git clone https://github.com/JinkuiH/DOSTA-Net.git
 cd DOSTA-Net
+conda create -n dostanet python=3.9
+conda activate dostanet
 pip install -r requirements.txt
 ```
 
