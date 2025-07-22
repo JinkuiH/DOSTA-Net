@@ -535,18 +535,18 @@ class trainingPlanner(object):
                 print("No max pred_bin")
                                               
             pred_bin = (pred_bin*255).astype(np.uint8)
-            pred_bin = cv2.threshold(pred_bin, fixed_thresh, 1, cv2.THRESH_BINARY)[1]
+            pred_bin_s = cv2.threshold(pred_bin, fixed_thresh, 1, cv2.THRESH_BINARY)[1]
 
             # --- 3. Resize if needed ---
             if pred_bin.shape != gt.shape:
-                pred_bin = cv2.resize(pred_bin, (gt.shape[1], gt.shape[0]), interpolation=cv2.INTER_NEAREST)
+                pred_bin = cv2.resize(pred_bin_s, (gt.shape[1], gt.shape[0]), interpolation=cv2.INTER_NEAREST)
 
             # --- 4. 保存二值化图像 ---
             if binary_save_root:
                 save_dir = os.path.join(binary_save_root, volume)
                 os.makedirs(save_dir, exist_ok=True)
                 save_path = os.path.join(save_dir, f"{volume}.png")
-                cv2.imwrite(save_path, pred_bin * 255)  # 乘255恢复可视化
+                cv2.imwrite(save_path, pred_bin_s * 255)  # 乘255恢复可视化
 
                 save_path = os.path.join(save_dir, f"{volume}_pred.png")
                 cv2.imwrite(save_path, pred_avg_uint8)  # 乘255恢复可视化
