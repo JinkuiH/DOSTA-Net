@@ -196,7 +196,6 @@ class trainingPlanner(object):
         logger = self.logger.my_fantastic_logging
         plt.figure(figsize=(10, 6))
         
-        # 获取各损失历史数据
         epochs = list(range(epoch + 1))
         l_rec = logger['train_l_rec'][:epoch+1] if 'train_l_rec' in logger else []
         loss_gen_adv = logger['train_loss_gen_adv'][:epoch+1] if 'train_loss_gen_adv' in logger else []
@@ -204,7 +203,6 @@ class trainingPlanner(object):
         loss_real_vessel = logger['loss_real_vessel'][:epoch+1] if 'loss_real_vessel' in logger else []
         loss_DC = logger['loss_DC'][:epoch+1] if 'loss_DC' in logger else []
 
-        # 绘制曲线
         if l_rec:
             plt.plot(epochs, l_rec, label='Reconstruction Loss')
         if loss_gen_adv:
@@ -223,7 +221,7 @@ class trainingPlanner(object):
         plt.legend()
         plt.grid(True)
         
-        # 保存图片
+  
         save_dir = join(self.output_folder, 'loss_plots')
         maybe_mkdir_p(save_dir)
         plt.savefig(join(save_dir, f'loss_epoch_{epoch}.png'))
@@ -346,20 +344,19 @@ class trainingPlanner(object):
                 data1 = image.to(self.device, non_blocking=True)
                 rec,_ = self.network(data1,data1)
                 # rec = rec.squeeze(1)
-                # 保存单通道的重建图像
                 for i in range(rec.shape[0]):
-                    ori_image = data1[i].squeeze().cpu().numpy()  # 转为 numpy 格式
+                    ori_image = data1[i].squeeze().cpu().numpy() 
                     if not self.plans['neighbor_num'] == 1:
                         ori_image = ori_image[self.plans['neighbor_num']//2]
                     
-                    rec_image = rec[i].squeeze().cpu().numpy()  # 转为 numpy 格式
+                    rec_image = rec[i].squeeze().cpu().numpy() 
                     
 
                     # print('Min and max:',np.min(difference),np.max(difference))
                     difference =  (rec_image - ori_image)*255
 
-                    ori_image = (ori_image * 255).astype(np.uint8)  # 归一化到 [0, 255]
-                    rec_image = (rec_image * 255).astype(np.uint8)  # 归一化到 [0, 255]
+                    ori_image = (ori_image * 255).astype(np.uint8)  
+                    rec_image = (rec_image * 255).astype(np.uint8)  
 
                     # difference = difference/0.3
 
@@ -400,15 +397,14 @@ class trainingPlanner(object):
                 data1 = image.to(self.device, non_blocking=True)
                 rec,_ = self.network(data1,data1)
                 # rec = rec.squeeze(1)
-                # 保存单通道的重建图像
                 for i in range(rec.shape[0]):
-                    ori_image = data1[i].squeeze().cpu().numpy()  # 转为 numpy 格式
+                    ori_image = data1[i].squeeze().cpu().numpy()  
                     if not self.plans['neighbor_num'] == 1:
                         ori_image = ori_image[self.plans['neighbor_num']//2]
-                    ori_image = (ori_image * 255).astype(np.uint8)  # 归一化到 [0, 255]
+                    ori_image = (ori_image * 255).astype(np.uint8)  
 
                     rec_image = rec[i].squeeze().cpu().numpy()  # 转为 numpy 格式
-                    rec_image = (rec_image * 255).astype(np.uint8)  # 归一化到 [0, 255]
+                    rec_image = (rec_image * 255).astype(np.uint8)  
 
                     # print('Min and max:',np.min(difference),np.max(difference))
                     difference =  rec_image.astype(np.int16) - ori_image.astype(np.int16)
@@ -429,37 +425,32 @@ class trainingPlanner(object):
 
                     res_dir = os.path.join(self.output_folder,"reconstruction", os.path.relpath(image_path[0], datapath))
                     os.makedirs(os.path.dirname(res_dir), exist_ok=True)
-                    cv2.imwrite(res_dir, rec_image)  # 保存重建图像
+                    cv2.imwrite(res_dir, rec_image)  
 
                     res_dir = os.path.join(self.output_folder,"segmentation", os.path.relpath(image_path[0], datapath))
                     os.makedirs(os.path.dirname(res_dir), exist_ok=True)
-                    cv2.imwrite(res_dir, vessel)  # 保存重建图像
+                    cv2.imwrite(res_dir, vessel) 
 
                     res_dir = os.path.join(self.output_folder,"Residual", os.path.relpath(image_path[0], datapath))
                     os.makedirs(os.path.dirname(res_dir), exist_ok=True)
-                    cv2.imwrite(res_dir, vessel_residual)  # 保存重建图像
+                    cv2.imwrite(res_dir, vessel_residual)  
 
         return self.evaluate_segmentation(GTPtah, join(self.output_folder,"Residual"), keyslice, binary_save_root=join(self.output_folder,"binary"))
 
                     # self.save_output(datapath,ori_image, rec_image, norm_vessel, vessel, image_path[0])
     
     def postprocess_mask(self, pred_bin, kernel_size=5):
-        # 形态学闭运算：填补小断裂
         kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (kernel_size, kernel_size))
         closed = cv2.morphologyEx(pred_bin, cv2.MORPH_CLOSE, kernel)
         # closed = pred_bin
 
-        # 连通域分析：保留最大连通域
         num_labels, labels, stats, _ = cv2.connectedComponentsWithStats(closed.astype(np.uint8), connectivity=8)
 
         if num_labels <= 1:
-            # 只有背景，返回原图
             return closed
 
-        # 找到最大连通域（去掉背景，第1个是背景）
         largest_label = 1 + np.argmax(stats[1:, cv2.CC_STAT_AREA])
         
-        # 生成最大连通域mask
         largest_component = (labels == largest_label).astype(np.uint8)
 
         return largest_component
@@ -479,7 +470,6 @@ class trainingPlanner(object):
             gt = cv2.imread(gt_images[0], cv2.IMREAD_GRAYSCALE)
             gt = (gt > 10).astype(np.uint8)
 
-            # --- 2. 读取预测图像并平均 ---
             pred_images = sorted(glob(os.path.join(pred_dir, '*.png')) + glob(os.path.join(pred_dir, '*.jpg')))
             selected_preds = []
 
@@ -500,29 +490,16 @@ class trainingPlanner(object):
             _, pred_bin = cv2.threshold(pred_avg_uint8, fixed_thresh, 255, cv2.THRESH_BINARY)
             # pred_bin = postprocess_mask(pred_bin, kernel_size=3)
 
-            # frangi_img = skimage.filters.frangi(pred_bin,
-            #                                 sigmas=np.linspace(1, 15, 30),     # 更密集的尺度范围
-            #                                 alpha=0.5,                         # 降低对比要求
-            #                                 beta=0.9,                          # 更强调细长结构
-            #                                 gamma=15,                          # 抑制噪声
-            #                                 black_ridges=False,               # 关键点：白色血管
-            #                                 mode='reflect'
-            #                             )
             frangi_img = skimage.filters.sato(pred_bin, sigmas=np.linspace(2, 10, 10), black_ridges=False)
 
 
-            # Step 2: 自动阈值 + 原图亮度过滤
             pred_bin = (frangi_img > 0.1) & (pred_avg_uint8 > 20)
 
-            # Step 3: 面积 & 形状过滤
             # pred_bin = binary_fill_holes(pred_bin)
 
             pred_bin = remove_small_objects(pred_bin, min_size=100)
             
-            # Step 1: 膨胀以连接断裂区域
-            pred_bin_dilated = dilation(pred_bin, disk(3))  # disk(1~3) 视连接程度而定
-
-            # Step 2: 提取最大连通域
+            pred_bin_dilated = dilation(pred_bin, disk(3))  
             label_img = label(pred_bin_dilated)
             regions = regionprops(label_img)
 
@@ -531,28 +508,25 @@ class trainingPlanner(object):
                 largest_cc_mask = label_img == max_region.label
                 pred_bin = np.logical_and(pred_bin, largest_cc_mask)
             else:
-                # regions 为空，跳过提取最大连通域
                 print("No max pred_bin")
                                               
             pred_bin = (pred_bin*255).astype(np.uint8)
             pred_bin_s = cv2.threshold(pred_bin, fixed_thresh, 1, cv2.THRESH_BINARY)[1]
 
-            # --- 3. Resize if needed ---
             if pred_bin.shape != gt.shape:
                 pred_bin = cv2.resize(pred_bin_s, (gt.shape[1], gt.shape[0]), interpolation=cv2.INTER_NEAREST)
 
-            # --- 4. 保存二值化图像 ---
             if binary_save_root:
                 save_dir = os.path.join(binary_save_root, volume)
                 os.makedirs(save_dir, exist_ok=True)
                 save_path = os.path.join(save_dir, f"{volume}.png")
-                cv2.imwrite(save_path, pred_bin_s * 255)  # 乘255恢复可视化
+                cv2.imwrite(save_path, pred_bin_s * 255)  
 
                 save_path = os.path.join(save_dir, f"{volume}_pred.png")
-                cv2.imwrite(save_path, pred_avg_uint8)  # 乘255恢复可视化
+                cv2.imwrite(save_path, pred_avg_uint8)  
 
                 save_path = os.path.join(save_dir, f"{volume}_gt.png")
-                cv2.imwrite(save_path, gt*255)  # 乘255恢复可视化
+                cv2.imwrite(save_path, gt*255)  
 
             # --- 5. Flatten for metrics ---
             gt_flat = gt.flatten()
@@ -564,7 +538,6 @@ class trainingPlanner(object):
             precision = precision_score(gt_flat, pred_flat)
             recall = recall_score(gt_flat, pred_flat)
 
-            # --- 新增：confusion matrix 计算 specificity 和 accuracy ---
             tn, fp, fn, tp = confusion_matrix(gt_flat, pred_flat, labels=[0, 1]).ravel()
             specificity = tn / (tn + fp) if (tn + fp) > 0 else 0.0
             accuracy = (tp + tn) / (tp + tn + fp + fn)
@@ -576,19 +549,18 @@ class trainingPlanner(object):
                 #'precision': precision,
                 'recall': recall,
                 #'dr': recall,  # same as recall
-                'specificity': specificity,  # 新增
-                'accuracy': accuracy          # 新增
+                'specificity': specificity, 
+                'accuracy': accuracy         
             })
 
-        # --- 7. 打印平均 ---
         avg = {
             'dice': np.mean([m['dice'] for m in metrics]),
             #'iou': np.mean([m['iou'] for m in metrics]),
             #'precision': np.mean([m['precision'] for m in metrics]),
             'recall': np.mean([m['recall'] for m in metrics]),
             #'dr': np.mean([m['dr'] for m in metrics]),
-            'specificity': np.mean([m['specificity'] for m in metrics]),  # 新增
-            'accuracy': np.mean([m['accuracy'] for m in metrics])         # 新增
+            'specificity': np.mean([m['specificity'] for m in metrics]), 
+            'accuracy': np.mean([m['accuracy'] for m in metrics])         
         }
         std = {
             'dice': np.std([m['dice'] for m in metrics]),
@@ -596,8 +568,8 @@ class trainingPlanner(object):
             #'precision': np.std([m['precision'] for m in metrics]),
             'recall': np.std([m['recall'] for m in metrics]),
             #'dr': np.std([m['dr'] for m in metrics]),
-            'specificity': np.std([m['specificity'] for m in metrics]),   # 新增
-            'accuracy': np.std([m['accuracy'] for m in metrics])          # 新增
+            'specificity': np.std([m['specificity'] for m in metrics]),   
+            'accuracy': np.std([m['accuracy'] for m in metrics])         
         }
         print("\n Average Metrics:")
         for k in avg:
@@ -610,21 +582,21 @@ class trainingPlanner(object):
         # Create segmentation folder structure
         segmentation_dir = os.path.join(self.output_folder, "segmentation_norm", os.path.relpath(image_path, dataPath))
         os.makedirs(os.path.dirname(segmentation_dir), exist_ok=True)
-        cv2.imwrite(segmentation_dir, output_norm)  # 保存重建图像
+        cv2.imwrite(segmentation_dir, output_norm)  
 
         res_dir = os.path.join(self.output_folder,"reconstruction", os.path.relpath(image_path, dataPath))
         os.makedirs(os.path.dirname(res_dir), exist_ok=True)
-        cv2.imwrite(res_dir, rec)  # 保存重建图像
+        cv2.imwrite(res_dir, rec)  
 
         res_dir = os.path.join(self.output_folder,"segmentation_ori", os.path.relpath(image_path, dataPath))
         os.makedirs(os.path.dirname(res_dir), exist_ok=True)
-        cv2.imwrite(res_dir, output_ori)  # 保存重建图像
+        cv2.imwrite(res_dir, output_ori)  
 
         res_dir = os.path.join(self.output_folder,"CMB", os.path.relpath(image_path, dataPath))
         os.makedirs(os.path.dirname(res_dir), exist_ok=True)
 
-        combined_image = np.concatenate([ori,  rec, output_ori], axis=1)  # 水平拼接
-        cv2.imwrite(res_dir, combined_image)  # 保存重建图像
+        combined_image = np.concatenate([ori,  rec, output_ori], axis=1)  
+        cv2.imwrite(res_dir, combined_image)  
     
    
 
